@@ -82,7 +82,7 @@ def sample_sequence(personality, history, tokenizer, model, args, current_output
             instance["token_type_ids"], device=args.device
         ).unsqueeze(0)
 
-        logits = model(input_ids, token_type_ids=token_type_ids)
+        logits = model(input_ids, token_type_ids=token_type_ids).logits
         if isinstance(logits, tuple):  # for gpt2 and maybe others
             logits = logits[0]
         logits = logits[0, -1, :] / args.temperature
