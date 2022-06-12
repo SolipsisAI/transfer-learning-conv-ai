@@ -365,11 +365,13 @@ def train():
             input_ids, mc_token_ids, labels, mc_labels, token_type_ids = batch
             logger.info(tokenizer.decode(input_ids[0, -1, :].tolist()))
             # if we dont send labels to model, it doesnt return losses
-            lm_logits, mc_logits, *_ = model(
+            outputs = model(
                 input_ids,
                 token_type_ids=token_type_ids,
                 mc_token_ids=mc_token_ids,
             )
+            lm_logits = outputs.lm_logits
+            mc_logits = outputs.mc_logits
             lm_logits_flat_shifted = (
                 lm_logits[..., :-1, :].contiguous().view(-1, lm_logits.size(-1))
             )
@@ -491,4 +493,5 @@ def train():
 
 
 if __name__ == "__main__":
+    torch.cuda.empty_cache()
     train()
