@@ -1,6 +1,5 @@
-#torch
-pytorch-ignite
-#transformers==2.5.1
-#tensorboardX==1.8
-#tensorflow  # for tensorboardX
-spacy
+pytorch-ignite==0.4.9
+spacy==3.3.1
+transformers==4.19.2
+torch==1.11.0
+torchtext==0.12.0
