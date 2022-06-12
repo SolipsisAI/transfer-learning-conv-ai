@@ -15,8 +15,8 @@ from ignite.engine import Engine, Events
 from ignite.handlers import ModelCheckpoint, global_step_from_engine
 from ignite.metrics import Accuracy, Loss, MetricsLambda, RunningAverage
 from ignite.contrib.handlers import ProgressBar, PiecewiseLinear
-from ignite.contrib.handlers.tensorboard_logger import (
-    TensorboardLogger,
+from ignite.contrib.handlers.mlflow_logger import (
+    MLflowLogger,
     OutputHandler,
     OptimizerParamsHandler,
 )
@@ -29,6 +29,8 @@ from transformers import (
     WEIGHTS_NAME,
     CONFIG_NAME,
 )
+
+MLFLOW_URI = "http://192.168.68.91:5000"
 
 from utils import get_dataset, make_logdir
 
@@ -437,7 +439,9 @@ def train():
         )
 
         log_dir = make_logdir(args.model_checkpoint)
-        tb_logger = TensorboardLogger(log_dir)
+        tb_logger = MLflowLogger(tracking_uri=MLFLOW_URI)
+
+        tb_logger.log_params(args.__dict__)
 
         tb_logger.attach(
             trainer,
