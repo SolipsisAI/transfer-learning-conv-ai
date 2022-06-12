@@ -370,7 +370,7 @@ def train():
                 token_type_ids=token_type_ids,
                 mc_token_ids=mc_token_ids,
             )
-            lm_logits = outputs.lm_logits
+            lm_logits = outputs.logits
             mc_logits = outputs.mc_logits
             lm_logits_flat_shifted = (
                 lm_logits[..., :-1, :].contiguous().view(-1, lm_logits.size(-1))
