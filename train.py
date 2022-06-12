@@ -62,7 +62,6 @@ def average_distributed_scalar(scalar, args):
 def pad_dataset(dataset, padding=0):
     """Pad the dataset. This could be optimized by defining a Dataset class and padding at the batch level, but this is simpler."""
     max_l = max(len(x) for x in dataset["input_ids"])
-    assert max_l <= 512
     for name in PADDED_INPUTS:
         dataset[name] = [
             x + [padding if name != "labels" else -100] * (max_l - len(x))
@@ -135,7 +134,7 @@ def get_data_loaders(args, tokenizer):
                             datasets[dataset_name][input_name].append(input_array)
                     datasets[dataset_name]["mc_labels"].append(num_candidates - 1)
                     datasets[dataset_name]["n_candidates"] = num_candidates
-                # persona = [persona[-1]] + persona[:-1]  # permuted personalities
+                persona = [persona[-1]] + persona[:-1]  # permuted personalities
 
     logger.info("Pad inputs and convert to Tensor")
     tensor_datasets = {"train": [], "valid": []}
